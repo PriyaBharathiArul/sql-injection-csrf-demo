@@ -11,7 +11,7 @@ A hands-on educational platform demonstrating SQL Injection and CSRF vulnerabili
 - **Docker Containerized**: Fully isolated environment for safe testing
 
 ## 🎥 Project Demo
-▶️ [[Watch the demo video (MP4)](https://github.com/PriyaBharathiArul/sql-injection-csrf-demo/releases](https://github.com/PriyaBharathiArul/sql-injection-csrf-demo/releases/tag/v1.0-demo))
+▶️ [[Watch the demo video (MP4)](https://github.com/PriyaBharathiArul/sql-injection-csrf-demo/releases)]
 
 ## Quick Start
 
