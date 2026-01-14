@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account Overview - Chaze Bank</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chaze-bank.css') }}">
+</head>
+<body>
+    <!-- Bank Header -->
+    <div class="bank-header">
+        <div class="bank-logo">
+            <div class="logo-icon">C</div>
+            <span>Chaze Bank</span>
+        </div>
+        <div class="security-badge">
+            <span class="security-icon">👤</span>
+            <span>{{ username }}</span>
+            <a href="/logout" style="color: white; margin-left: 1.5rem; text-decoration: none; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border-radius: 6px;">Logout</a>
+        </div>
+    </div>
+
+    <!-- Mode Badge -->
+    <div class="mode-badge {% if is_vulnerable %}vulnerable{% else %}secure{% endif %}">
+        {{ 'DEMO: VULNERABLE VERSION' if is_vulnerable else 'DEMO: SECURE VERSION' }}
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner fade-in">
+            <h1>Welcome back, {{ username }}!</h1>
+            <p>Here's what's happening with your accounts today</p>
+        </div>
+
+        <!-- Security Alert -->
+        {% if is_vulnerable %}
+        <div class="alert alert-warning">
+            <span class="alert-icon">⚠️</span>
+            <div>
+                <strong>Educational Demo:</strong> This version has NO CSRF protection!
+                Profile changes can be triggered from external websites.
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-success">
+            <span class="alert-icon">✓</span>
+            <div>
+                <strong>Secure Banking:</strong> All state-changing operations are protected with CSRF tokens.
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Account Summary Cards -->
+        <div class="account-summary">
+            <div class="summary-card">
+                <h3>Checking Account</h3>
+                <div class="summary-amount">$2,547.89</div>
+                <p style="color: #6c757d; font-size: 0.9rem; margin-top: 0.5rem;">****7823</p>
+            </div>
+            <div class="summary-card">
+                <h3>Savings Account</h3>
+                <div class="summary-amount">$15,832.42</div>
+                <p style="color: #6c757d; font-size: 0.9rem; margin-top: 0.5rem;">****4512</p>
+            </div>
+            <div class="summary-card">
+                <h3>Available Credit</h3>
+                <div class="summary-amount">$8,500.00</div>
+                <p style="color: #6c757d; font-size: 0.9rem; margin-top: 0.5rem;">****9201</p>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Recent Transactions -->
+            <div class="dashboard-card">
+                <div class="card-title">
+                    <h2>Recent Transactions</h2>
+                </div>
+                <div class="card-content">
+                    <ul class="transaction-list">
+                        <li class="transaction-item">
+                            <div class="transaction-details">
+                                <div class="transaction-name">Amazon Purchase</div>
+                                <div class="transaction-date">Dec 3, 2025</div>
+                            </div>
+                            <div class="transaction-amount debit">-$127.45</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-details">
+                                <div class="transaction-name">Salary Deposit</div>
+                                <div class="transaction-date">Dec 1, 2025</div>
+                            </div>
+                            <div class="transaction-amount credit">+$3,500.00</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-details">
+                                <div class="transaction-name">Grocery Store</div>
+                                <div class="transaction-date">Nov 30, 2025</div>
+                            </div>
+                            <div class="transaction-amount debit">-$86.32</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-details">
+                                <div class="transaction-name">Netflix Subscription</div>
+                                <div class="transaction-date">Nov 28, 2025</div>
+                            </div>
+                            <div class="transaction-amount debit">-$15.99</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Profile Settings -->
+            <div class="dashboard-card">
+                <div class="card-title">
+                    <h2>Profile Settings</h2>
+                </div>
+                <div class="card-content">
+                    <div id="profileMessage" class="user-info" style="margin-bottom: 1.5rem;">
+                        <div class="info-row">
+                            <span class="info-label">Username:</span>
+                            <span class="info-value">{{ username }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value" id="currentEmail">Loading...</span>
+                        </div>
+                        <div class="info-row" style="border-bottom: none;">
+                            <span class="info-label">Bio:</span>
+                            <span class="info-value" id="currentBio">Loading...</span>
+                        </div>
+                    </div>
+
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Update Email</label>
+                            <input type="email" id="email" name="email" class="form-control"
+                                   placeholder="new.email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="bio" class="form-label">Update Bio</label>
+                            <textarea id="bio" name="bio" class="form-control"
+                                      placeholder="Tell us about yourself..." rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+
+                    {% if is_vulnerable %}
+                    <div style="margin-top: 1rem; padding: 0.75rem; background: #fff3cd; border-radius: 6px; font-size: 0.85rem; border-left: 4px solid #ffc107;">
+                        <strong>⚠️ CSRF Vulnerability:</strong> This form has no CSRF token protection!
+                        An attacker site can change your email while you're logged in.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Users Section -->
+        <div class="dashboard-card" style="margin-top: 2rem;">
+            <div class="card-title">
+                <h2>Search Bank Customers</h2>
+            </div>
+            <div class="card-content">
+                <div id="searchMessage"></div>
+                <form id="searchForm">
+                    <div class="form-group">
+                        <label for="search_query" class="form-label">Search by Username</label>
+                        <input type="text" id="search_query" name="query" class="form-control"
+                               placeholder="Search for customers...">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+                {% if is_vulnerable %}
+                <div style="margin-top: 1rem; padding: 0.75rem; background: #f8d7da; border-radius: 6px; font-size: 0.85rem; border-left: 4px solid #dc3545;">
+                    <strong>⚠️ SQL Injection Vulnerability:</strong><br>
+                    Try: <code style="background: white; padding: 2px 6px; border-radius: 3px; font-size: 0.8rem;">
+                    ' UNION SELECT id, username, password, email, bio FROM users --
+                    </code>
+                </div>
+                {% endif %}
+
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+
+        <!-- Add Friend Section (for CSRF demo) -->
+        <div class="dashboard-card" style="margin-top: 2rem;">
+            <div class="card-title">
+                <h2>Manage Beneficiaries</h2>
+            </div>
+            <div class="card-content">
+                <p style="color: #6c757d; margin-bottom: 1rem;">Add authorized users who can receive transfers from your account.</p>
+                <div id="friendMessage"></div>
+                <form id="friendForm">
+                    <div class="form-group">
+                        <label for="friend_username" class="form-label">Beneficiary Username</label>
+                        <input type="text" id="friend_username" name="friend_username" class="form-control"
+                               placeholder="Enter username">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Beneficiary</button>
+                </form>
+                {% if is_vulnerable %}
+                <div style="margin-top: 1rem; padding: 0.75rem; background: #fff3cd; border-radius: 6px; font-size: 0.85rem;">
+                    <strong>⚠️ CSRF Demo:</strong> This action has no CSRF protection and can be triggered from external sites.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bank-footer">
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Security Center</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Contact Support</a>
+        </div>
+        <div class="footer-text">
+            © 2025 Chaze Bank. Member FDIC. Equal Housing Lender.<br>
+            <strong>Educational Demo:</strong> This is a security demonstration for EEP595 course project.
+        </div>
+    </div>
+
+    <script>
+        const isVulnerable = {{ 'true' if is_vulnerable else 'false' }};
+        let csrfToken = null;
+
+        // Get CSRF token if in patched mode
+        async function getCsrfToken() {
+            if (isVulnerable) return null;
+
+            try {
+                const response = await fetch('/api/csrf_token');
+                const data = await response.json();
+                return data.csrf_token;
+            } catch (error) {
+                console.error('Failed to get CSRF token:', error);
+                return null;
+            }
+        }
+
+        // Load current profile info
+        async function loadProfile() {
+            try {
+                const response = await fetch('/api/get_profile');
+                const data = await response.json();
+
+                if (data.user) {
+                    document.getElementById('currentEmail').textContent = data.user.email || 'Not set';
+                    document.getElementById('currentBio').textContent = data.user.bio || 'Not set';
+                }
+            } catch (error) {
+                console.error('Failed to load profile:', error);
+            }
+        }
+
+        // Profile update
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageDiv = document.getElementById('profileMessage');
+            const formData = new FormData(e.target);
+
+            if (!isVulnerable && csrfToken) {
+                formData.append('csrf_token', csrfToken);
+            }
+
+            try {
+                const endpoint = '/api/update_profile_csrf';
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageDiv.className = 'alert alert-success';
+                    messageDiv.innerHTML = `
+                        <span class="alert-icon">✓</span>
+                        <div>${data.message}</div>
+                    `;
+                    messageDiv.style.display = 'flex';
+                    messageDiv.style.marginBottom = '1.5rem';
+
+                    // Reload profile
+                    setTimeout(() => loadProfile(), 500);
+
+                    // Clear form
+                    e.target.reset();
+                } else {
+                    messageDiv.className = 'alert alert-warning';
+                    messageDiv.innerHTML = `
+                        <span class="alert-icon">⚠️</span>
+                        <div>${data.message}</div>
+                    `;
+                    messageDiv.style.display = 'flex';
+                    messageDiv.style.marginBottom = '1.5rem';
+                }
+
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            } catch (error) {
+                messageDiv.className = 'alert alert-warning';
+                messageDiv.innerHTML = `
+                    <span class="alert-icon">⚠️</span>
+                    <div>Error: ${error.message}</div>
+                `;
+                messageDiv.style.display = 'flex';
+                messageDiv.style.marginBottom = '1.5rem';
+            }
+        });
+
+        // Add friend/beneficiary
+        document.getElementById('friendForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageDiv = document.getElementById('friendMessage');
+            const formData = new FormData(e.target);
+
+            if (!isVulnerable && csrfToken) {
+                formData.append('csrf_token', csrfToken);
+            }
+
+            try {
+                const response = await fetch('/api/add_friend', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageDiv.className = 'alert alert-success';
+                    messageDiv.innerHTML = `
+                        <span class="alert-icon">✓</span>
+                        <div>${data.message}</div>
+                    `;
+                } else {
+                    messageDiv.className = 'alert alert-warning';
+                    messageDiv.innerHTML = `
+                        <span class="alert-icon">⚠️</span>
+                        <div>${data.message}</div>
+                    `;
+                }
+
+                messageDiv.style.display = 'flex';
+                setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
+
+                // Clear form
+                e.target.reset();
+            } catch (error) {
+                messageDiv.className = 'alert alert-warning';
+                messageDiv.innerHTML = `
+                    <span class="alert-icon">⚠️</span>
+                    <div>Error: ${error.message}</div>
+                `;
+                messageDiv.style.display = 'flex';
+            }
+        });
+
+        // Search
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageDiv = document.getElementById('searchMessage');
+            const resultsDiv = document.getElementById('searchResults');
+            const formData = new FormData(e.target);
+            const query = formData.get('query');
+
+            try {
+                const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data.success && data.results) {
+                    resultsDiv.innerHTML = '<h3 style="margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1.1rem;">Search Results:</h3>';
+
+                    if (data.results.length === 0) {
+                        resultsDiv.innerHTML += '<p style="color: #6c757d;">No customers found matching your search.</p>';
+                    } else {
+                        const userCards = data.results.map(user => `
+                            <div class="search-result-item">
+                                <strong style="color: #003d82; font-size: 1.05rem;">${user.username}</strong><br>
+                                <span style="color: #6c757d; font-size: 0.9rem;">${user.email || 'No email'}</span><br>
+                                ${user.bio ? '<small style="color: #6c757d;">' + user.bio + '</small>' : ''}
+                                ${user.password ? '<br><span style="color: #dc3545; font-weight: 600;">⚠️ PASSWORD EXPOSED: ' + user.password + '</span>' : ''}
+                            </div>
+                        `).join('');
+                        resultsDiv.innerHTML += userCards;
+                    }
+
+                    if (data.query) {
+                        resultsDiv.innerHTML += '<div style="margin-top: 1rem; padding: 0.75rem; background: #f8f9fa; border-radius: 6px; font-size: 0.85rem;"><strong>SQL Query:</strong> <code style="background: white; padding: 2px 6px; border-radius: 3px;">' + data.query + '</code></div>';
+                    }
+                } else {
+                    messageDiv.className = 'alert alert-warning';
+                    messageDiv.innerHTML = `
+                        <span class="alert-icon">⚠️</span>
+                        <div>${data.message}</div>
+                    `;
+                    messageDiv.style.display = 'flex';
+                    resultsDiv.innerHTML = '';
+                }
+            } catch (error) {
+                messageDiv.className = 'alert alert-warning';
+                messageDiv.innerHTML = `
+                    <span class="alert-icon">⚠️</span>
+                    <div>Error: ${error.message}</div>
+                `;
+                messageDiv.style.display = 'flex';
+            }
+        });
+
+        // Initialize
+        (async function() {
+            if (!isVulnerable) {
+                csrfToken = await getCsrfToken();
+            }
+            await loadProfile();
+        })();
+    </script>
+</body>
+</html>

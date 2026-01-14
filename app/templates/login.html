@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Banking Login - Chaze Bank</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chaze-bank.css') }}">
+</head>
+<body>
+    <!-- Bank Header -->
+    <div class="bank-header">
+        <div class="bank-logo">
+            <div class="logo-icon">C</div>
+            <span>Chaze Bank</span>
+        </div>
+        <div class="security-badge">
+            <span class="security-icon">🔒</span>
+            <span>Secure Banking</span>
+        </div>
+    </div>
+
+    <!-- Mode Badge (for demo purposes) -->
+    <div class="mode-badge {% if mode == 'vulnerable' %}vulnerable{% else %}secure{% endif %}">
+        {{ 'DEMO: VULNERABLE VERSION' if mode == 'vulnerable' else 'DEMO: SECURE VERSION' }}
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container fade-in">
+        <div class="login-card">
+            <div class="card-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to access your account</p>
+            </div>
+
+            <div class="card-body">
+                {% if mode == 'vulnerable' %}
+                <div class="alert alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>Educational Demo:</strong> This is an intentionally vulnerable version
+                        demonstrating SQL injection vulnerabilities. Never use vulnerable code in production.
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-success">
+                    <span class="alert-icon">✓</span>
+                    <div>
+                        <strong>Secure Banking:</strong> This version uses parameterized queries and
+                        CSRF tokens to protect against common attacks.
+                    </div>
+                </div>
+                {% endif %}
+
+                <div id="message"></div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" name="username" class="form-control"
+                               placeholder="Enter your username" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-control"
+                               placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Sign In Securely
+                    </button>
+                </form>
+
+                <div class="test-accounts">
+                    <h3>Demo Test Accounts</h3>
+                    <ul class="account-list">
+                        <li class="account-item">alice / password123</li>
+                        <li class="account-item">bob / secret456</li>
+                        <li class="account-item">admin / admin_secret</li>
+                    </ul>
+                </div>
+
+                {% if mode == 'vulnerable' %}
+                <div class="test-accounts" style="border-color: #dc3545;">
+                    <h3 style="color: #dc3545;">⚠️ Try SQL Injection Attack</h3>
+                    <ul class="account-list">
+                        <li class="account-item" style="color: #dc3545;">
+                            Username: <strong>admin' --</strong><br>
+                            Password: <strong>anything</strong>
+                        </li>
+                        <li class="account-item" style="color: #dc3545;">
+                            Username: <strong>' OR 1=1 --</strong><br>
+                            Password: <strong>anything</strong>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bank-footer">
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Security Center</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Contact Support</a>
+        </div>
+        <div class="footer-text">
+            © 2025 Chaze Bank. Member FDIC. Equal Housing Lender.<br>
+            <strong>Educational Demo:</strong> This is a security demonstration for EEP595 course project.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const messageDiv = document.getElementById('message');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> Signing in...';
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageDiv.className = 'alert alert-success';
+                    messageDiv.innerHTML = `
+                        <span class="alert-icon">✓</span>
+                        <div><strong>Success!</strong> Redirecting to your dashboard...</div>
+                    `;
+                    messageDiv.style.display = 'flex';
+                    setTimeout(() => window.location.href = '/dashboard', 1000);
+                } else {
+                    messageDiv.className = 'alert alert-warning';
+                    messageDiv.innerHTML = `
+                        <span class="alert-icon">⚠️</span>
+                        <div>${data.message || 'Login failed. Please check your credentials.'}</div>
+                    `;
+                    messageDiv.style.display = 'flex';
+
+                    // Show SQL error details if exposed (vulnerable mode only)
+                    if (data.query) {
+                        messageDiv.innerHTML += `<div style="margin-top:0.5rem"><small><strong>SQL Query Executed:</strong><br><code>${data.query}</code></small></div>`;
+                    }
+
+                    // Re-enable button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign In Securely';
+                }
+            } catch (error) {
+                messageDiv.className = 'alert alert-warning';
+                messageDiv.innerHTML = `
+                    <span class="alert-icon">⚠️</span>
+                    <div><strong>Error:</strong> ${error.message}</div>
+                `;
+                messageDiv.style.display = 'flex';
+
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In Securely';
+            }
+        });
+    </script>
+</body>
+</html>

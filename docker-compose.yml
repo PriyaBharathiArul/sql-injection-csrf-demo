@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  vulnerable-app:
+    build: ./app
+    container_name: vulnerable-app
+    ports:
+      - "5000:5000"
+    volumes:
+      - vulnerable-data:/app/data
+    environment:
+      - MODE=vulnerable
+      - PORT=5000
+      - FLASK_ENV=development
+    networks:
+      - demo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  patched-app:
+    build: ./app
+    container_name: patched-app
+    ports:
+      - "5001:5001"
+    volumes:
+      - patched-data:/app/data
+    environment:
+      - MODE=patched
+      - PORT=5001
+      - FLASK_ENV=development
+      - SECRET_KEY=super_secure_random_key_for_patched_app_12345
+    networks:
+      - demo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  attacker-site:
+    build: ./attacker
+    container_name: attacker-site
+    ports:
+      - "8080:8080"
+    networks:
+      - demo-network
+    restart: unless-stopped
+
+volumes:
+  vulnerable-data:
+    driver: local
+  patched-data:
+    driver: local
+
+networks:
+  demo-network:
+    driver: bridge

