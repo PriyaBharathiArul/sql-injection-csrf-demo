@@ -10,6 +10,9 @@ A hands-on educational platform demonstrating SQL Injection and CSRF vulnerabili
 - **Automated Testing**: Selenium and Python scripts for attack automation
 - **Docker Containerized**: Fully isolated environment for safe testing
 
+## 🎥 Project Demo
+▶️ [[Watch the demo video (MP4)](https://github.com/PriyaBharathiArul/sql-injection-csrf-demo/releases](https://github.com/PriyaBharathiArul/sql-injection-csrf-demo/releases/tag/v1.0-demo))
+
 ## Quick Start
 
 ```bash
